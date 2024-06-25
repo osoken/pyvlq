@@ -97,7 +97,7 @@ legacy_tox_ini = """
     deps = 
         -e .[docs]
     commands =
-        sphinx-apidoc -o docs/ src/pyvlq
+        sphinx-apidoc -o docs/ src/pyvlq src/pyvlq/core.py
         sphinx-build -b html docs/ docs/_build
 
     [testenv:lint]
