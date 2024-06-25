@@ -4,7 +4,7 @@ from pyvlq.core import decode, encode
 
 
 @pytest.mark.parametrize(
-    "input, expected",
+    ["input", "expected"],
     [
         (0, b"\x00"),
         (1, b"\x01"),
@@ -27,7 +27,7 @@ def test_encode(input: int, expected: bytes) -> None:
 
 
 @pytest.mark.parametrize(
-    "input, expected",
+    ["input", "expected"],
     [
         (b"\x00", 0),
         (b"\x01", 1),
@@ -47,3 +47,23 @@ def test_encode(input: int, expected: bytes) -> None:
 )
 def test_decode(input: bytes, expected: int) -> None:
     assert decode(input) == expected
+
+
+@pytest.mark.parametrize(
+    "input",
+    [
+        b"\x80",
+        b"\x80\x80",
+        b"\x80\x80\x80",
+        b"\x80\x80\x80\x80",
+        b"\x80\x80\x80\x80\x80",
+    ],
+)
+def test_decode_malformed(input: bytes) -> None:
+    with pytest.raises(ValueError):
+        decode(input)
+
+
+def test_encode_negative() -> None:
+    with pytest.raises(ValueError):
+        encode(-1)
