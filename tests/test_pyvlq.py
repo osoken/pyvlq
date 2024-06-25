@@ -16,3 +16,8 @@ def test_pyvlq_has_encode() -> None:
 def test_pyvlq_has_decode() -> None:
     assert hasattr(pyvlq, "decode")
     assert pyvlq.decode == pyvlq.core.decode
+
+
+def test_pyvlq_has_decode_stream() -> None:
+    assert hasattr(pyvlq, "decode_stream")
+    assert pyvlq.decode_stream == pyvlq.core.decode_stream
