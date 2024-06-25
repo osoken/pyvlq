@@ -1,6 +1,8 @@
+from io import BytesIO
+
 import pytest
 
-from pyvlq.core import decode, encode
+from pyvlq.core import decode, decode_stream, encode
 
 
 @pytest.mark.parametrize(
@@ -67,3 +69,25 @@ def test_decode_malformed(input: bytes) -> None:
 def test_encode_negative() -> None:
     with pytest.raises(ValueError):
         encode(-1)
+
+
+@pytest.mark.parametrize(
+    ("input", "expected", "remainder"),
+    [
+        (b"\x00", 0, b""),
+        (b"\x01", 1, b""),
+        (b"\x7f", 127, b""),
+        (b"\x01\x00", 1, b"\x00"),
+        (b"\x00\x01", 0, b"\x01"),
+        (b"\x81\x80\x80\x80\x00\x42\x23\x00\x21", 268435456, b"\x42\x23\x00\x21"),
+    ],
+)
+def test_decode_partial(input: bytes, expected: int, remainder: bytes) -> None:
+    buffer = BytesIO(input)
+    assert decode_stream(buffer) == expected
+    assert buffer.read() == remainder
+
+
+def test_decode_stream_malformed() -> None:
+    with pytest.raises(ValueError):
+        decode_stream(BytesIO(b"\x80"))
