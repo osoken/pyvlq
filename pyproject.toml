@@ -107,4 +107,17 @@ legacy_tox_ini = """
         black --check src/pyvlq tests
         isort --check-only src/pyvlq tests
         pflake8 src/pyvlq/ tests/
+
+    [testenv:build-release]
+    passenv = TWINE_PASSWORD
+    setenv = TWINE_USERNAME = __token__
+    allowlist_externals = rm
+    deps =
+        build
+        twine
+    commands =
+        rm -fr {toxinidir}/dist
+        python -m build
+        python -m twine upload {toxinidir}/dist/*
+
 """
