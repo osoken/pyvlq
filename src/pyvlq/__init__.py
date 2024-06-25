@@ -1,5 +1,5 @@
 from .core import decode, decode_stream, encode
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
-__all__ = ["decode", "encode", "decode_stream"]
+__all__ = ["__version__", "decode", "encode", "decode_stream"]
